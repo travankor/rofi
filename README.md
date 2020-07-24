@@ -10,6 +10,9 @@
 
 # A window switcher, Application launcher and dmenu replacement
 
+**This is a fork of [Rofi](https://github.com/davatorium/rofi) with added support for Wayland via the [layer shell protocol](https://github.com/swaywm/wlr-protocols).**
+**For more information, see the [Wayland support section](#wayland-support)**
+
 **Rofi** started as a clone of simpleswitcher, written by [Sean Pringle](http://github.com/seanpringle/simpleswitcher) - a
 popup window switcher roughly based on [superswitcher](http://code.google.com/p/superswitcher/).
 Simpleswitcher laid the foundations, and therefore Sean Pringle deserves most of the credit for this tool. **Rofi**
@@ -196,6 +199,37 @@ Type `Shift-/Left/Right` to switch between active modi.
 |`Alt-Shift-S`                         | Take a screenshot and store it in the Pictures directory. |
 
 For the full list of key bindings, see: `rofi -show keys` or `rofi -help`.
+
+# Wayland support
+
+To enable Wayland support, build the project with meson and make sure the wayland feature is enabled (it is by default).
+
+```
+meson build -Dwayland=enabled
+```
+
+The rest of the installation process is unchanged (see [Installation](#Installation)).
+
+**Rofi** can be invoked with the same CLI and configuration and can be forced to use X11 mode with the x11 flag:
+
+    rofi -x11 ...
+
+This port to layer shell is not yet in a stable state, so expect to encounter some rough edges. That said, the core of Rofi's functionalities is present.
+
+What is currently missing:
+
+  * [ ] Building with autotools, with or without Wayland support
+  * [ ] Window mode when running in Wayland mode. Though it can be emulated in dmenu mode on some compositors (ie: Sway IPC)
+  * [ ] `-normal-window` flag in Wayland mode
+  * [ ] Selecting which monitor to run rofi on in Wayland mode, only shows up on the currently focused monitor
+  * [ ] Advanced window location options such as x-offset and y-offset (probably not possible with layer shell)
+  * [ ] Some X11-specific options like `-dpi` or fake transparency
+  * [ ] Some refactoring to make the feature less intrusive
+  * [ ] Updated documentation
+
+If you find something does not work and is not listed here, please open a PR.
+
+I do not intend to make releases from this fork at the moment, but will simply try to keep it regularly in sync with the develop branch upstream.
 
 # Configuration
 
