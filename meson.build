@@ -53,7 +53,7 @@ deps = [
 
 # XCB stuff
 deps += [
-    subproject('libgwater/xcb').get_variable('libgwater_xcb'),
+    subproject('libgwater-xcb').get_variable('libgwater_xcb'),
     dependency('xcb-aux'),
     dependency('xcb-xkb'),
     dependency('xkbcommon-x11'),
@@ -73,7 +73,7 @@ if wayland_client.found()
     deps += wayland_client
     deps += wayland_protocols
     deps += wayland_cursor
-    deps += subproject('libgwater/wayland').get_variable('libgwater_wayland')
+    deps += subproject('libgwater-wayland').get_variable('libgwater_wayland')
 endif
 
 check = dependency('check', version: '>= 0.11.0', required: get_option('check'))
