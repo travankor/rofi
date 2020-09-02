@@ -403,6 +403,9 @@ static void wayland_rofi_view_set_window_title ( const char * title )
 static void wayland_rofi_view_pool_refresh ( void )
 {
     RofiViewState *state = rofi_view_get_active ();
+    if ( state == NULL ) {
+        return;
+    }
     display_buffer_pool_free ( state->pool );
     state->pool = NULL;
     wayland_rofi_view_update ( state, TRUE );

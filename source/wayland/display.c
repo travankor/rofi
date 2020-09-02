@@ -221,7 +221,11 @@ wayland_surface_protocol_enter ( void *data, struct wl_surface *wl_surface, stru
 
         // create new buffers with the correct scaled size
         rofi_view_pool_refresh ( );
-        rofi_view_set_size ( rofi_view_get_active (), -1, -1 );
+
+        RofiViewState *state = rofi_view_get_active ( );
+        if ( state != NULL ) {
+            rofi_view_set_size( state, -1, -1 );
+        }
     }
 }
 
@@ -356,8 +360,12 @@ wayland_key_repeat ( void *data )
         return G_SOURCE_REMOVE;
     }
 
+    char *text = nk_bindings_seat_handle_key( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
+
     RofiViewState *state = rofi_view_get_active ( );
-    char          *text  = nk_bindings_seat_handle_key ( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
+    if ( state == NULL ) {
+        return G_SOURCE_REMOVE;
+    }
 
     if ( text != NULL ) {
         rofi_view_handle_text ( state, text );
@@ -377,8 +385,12 @@ wayland_key_repeat_delay ( void *data )
         return FALSE;
     }
 
+    char *text = nk_bindings_seat_handle_key( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
+
     RofiViewState *state = rofi_view_get_active ( );
-    char          *text  = nk_bindings_seat_handle_key ( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
+    if ( state == NULL ) {
+        return G_SOURCE_REMOVE;
+    }
 
     if ( text != NULL ) {
         rofi_view_handle_text ( state, text );
@@ -417,30 +429,36 @@ wayland_keyboard_key ( void *data, struct wl_keyboard *keyboard, uint32_t serial
     else if ( kstate == WL_KEYBOARD_KEY_STATE_PRESSED ) {
         char *text = nk_bindings_seat_handle_key ( wayland->bindings_seat, NULL, keycode, NK_BINDINGS_KEY_STATE_PRESS );
 
-        if ( text != NULL ) {
-            rofi_view_handle_text ( state, text );
-        }
         if ( self->repeat.source != NULL ) {
             g_source_destroy ( self->repeat.source );
             self->repeat.source = NULL;
         }
 
-        self->repeat.key = keycode;
-        guint source_id = g_timeout_add ( self->repeat.delay, wayland_key_repeat_delay, data );
-        self->repeat.source = g_main_context_find_source_by_id ( NULL, source_id );
+        if ( state != NULL ) {
+            if ( text != NULL ) {
+                rofi_view_handle_text ( state, text );
+            }
+            self->repeat.key = keycode;
+            guint source_id = g_timeout_add ( self->repeat.delay, wayland_key_repeat_delay, data );
+            self->repeat.source = g_main_context_find_source_by_id ( NULL, source_id );
+        }
     }
 
-    rofi_view_maybe_update ( state );
+    if ( state != NULL ) {
+        rofi_view_maybe_update ( state );
+    }
 }
 
 static void
 wayland_keyboard_modifiers ( void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t mods_depressed, uint32_t mods_latched, uint32_t mods_locked, uint32_t group )
 {
-    RofiViewState *state = rofi_view_get_active ( );
-    wayland_seat  *self  = data;
-
+    wayland_seat *self = data;
     nk_bindings_seat_update_mask ( wayland->bindings_seat, NULL, mods_depressed, mods_latched, mods_locked, 0, 0, 0 );
-    rofi_view_maybe_update ( state );
+
+    RofiViewState *state = rofi_view_get_active ( );
+    if ( state != NULL ) {
+        rofi_view_maybe_update ( state );
+    }
 }
 
 static void
@@ -505,8 +523,13 @@ wayland_pointer_send_events ( wayland_seat *self )
 {
     RofiViewState *state = rofi_view_get_active ();
 
-    if ( self->motion.x > -1 || self->motion.y > -1 ) {
-        rofi_view_handle_mouse_motion ( state, self->motion.x, self->motion.y );
+    if ( state == NULL ) {
+        return;
+    }
+
+    if ( self->motion.x > -1 || self->motion.y > -1 )
+    {
+        rofi_view_handle_mouse_motion (state, self->motion.x, self->motion.y);
         self->motion.x = -1;
         self->motion.y = -1;
     }
