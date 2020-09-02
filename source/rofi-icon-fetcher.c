@@ -144,7 +144,7 @@ static cairo_surface_t* cairo_image_surface_create_from_jpeg_private ( struct jp
 
     surface = cairo_image_surface_create ( CAIRO_FORMAT_RGB24, cinfo->image_width, cinfo->image_height );
     data    = cairo_image_surface_get_data ( surface );
-    rgb     = (unsigned char*) ( malloc ( cinfo->output_width * cinfo->output_components ) );
+    rgb     = (unsigned char *) ( malloc ( cinfo->output_width * cinfo->output_components ) );
 
     while ( cinfo->output_scanline < cinfo->output_height ) {
         unsigned int i;

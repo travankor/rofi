@@ -334,7 +334,7 @@ static widget *box_find_mouse_target ( widget *wid, WidgetType type, gint x, gin
 
 static void box_set_state ( widget *wid, const char *state )
 {
-    for ( GList *iter = g_list_first ( ( (box*) wid )->children ); iter != NULL; iter = g_list_next ( iter ) ) {
+    for ( GList *iter = g_list_first ( ( (box *) wid )->children ); iter != NULL; iter = g_list_next ( iter ) ) {
         widget * child = (widget *) iter->data;
         widget_set_state ( child, state );
     }

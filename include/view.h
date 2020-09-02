@@ -304,6 +304,10 @@ void rofi_view_get_current_monitor ( int *width, int *height );
  * Takes a screenshot.
  */
 void rofi_capture_screenshot ( void );
+/**
+ * Set the window title.
+ */
+void rofi_view_set_window_title ( const char * title  );
 
 /**
  * set ellipsize mode to start.

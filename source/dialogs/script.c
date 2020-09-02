@@ -179,7 +179,7 @@ static DmenuScriptEntry *execute_executor ( Mode *sw, char *arg, unsigned int *l
     }
     g_strfreev ( env );
     if ( error != NULL ) {
-        char *msg = g_strdup_printf ( "Failed to execute: '%s'\nError: '%s'", (char*) sw->ed, error->message );
+        char *msg = g_strdup_printf ( "Failed to execute: '%s'\nError: '%s'", (char *) sw->ed, error->message );
         rofi_view_error_dialog ( msg, FALSE );
         g_free ( msg );
         // print error.
