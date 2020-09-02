@@ -298,8 +298,12 @@ static void wayland_rofi_view_update ( RofiViewState *state, gboolean qr )
     if ( state->pool == NULL ) {
         state->pool = display_buffer_pool_new ( state->width, state->height );
     }
-    cairo_surface_t *surface = display_buffer_pool_get_next_buffer ( state->pool );
-    cairo_t         *d       = cairo_create ( surface );
+    cairo_surface_t *surface = display_buffer_pool_get_next_buffer (state->pool);
+    if ( surface == NULL ) {
+        // no available buffer, bail out
+        return;
+    }
+    cairo_t *d = cairo_create ( surface );
     cairo_set_operator ( d, CAIRO_OPERATOR_SOURCE );
     // Paint the background transparent.
     cairo_set_source_rgba ( d, 0, 0, 0, 0.0 );
