@@ -239,12 +239,10 @@ static void wayland___create_window ( MenuFlags menu_flags )
     TICK_N ( "pango cairo font setup" );
 
     WlState.flags = menu_flags;
-    // Setup dpi
-    // FIXME: use scale, cairo_surface_set_device_scale
     // Setup font.
     // Dummy widget.
-    container  *win  = container_create ( NULL, "window.box" );
-    const char *font = rofi_theme_get_string ( WIDGET ( win ), "font", config.menu_font );
+    box *box  = box_create ( NULL, "window", ROFI_ORIENTATION_HORIZONTAL );
+    const char *font = rofi_theme_get_string ( WIDGET ( box ), "font", config.menu_font );
     if ( font ) {
         PangoFontDescription *pfd = pango_font_description_from_string ( font );
         if ( helper_validate_font ( pfd, font ) ) {
@@ -261,7 +259,7 @@ static void wayland___create_window ( MenuFlags menu_flags )
     // cleanup
     g_object_unref ( p );
 
-    widget_free ( WIDGET ( win ) );
+    widget_free ( WIDGET ( box ) );
     TICK_N ( "done" );
 }
 
