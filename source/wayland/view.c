@@ -96,7 +96,7 @@ static struct
 
 static void wayland_rofi_view_get_current_monitor ( int *width, int *height )
 {
-    display_get_surface_dimensions( width, height );
+    display_get_surface_dimensions ( width, height );
 }
 
 /**
@@ -108,12 +108,12 @@ static void wayland_rofi_view_capture_screenshot ( void )
 
 static gboolean wayland_rofi_view_repaint ( G_GNUC_UNUSED void * data  )
 {
-    RofiViewState * state = rofi_view_get_active();
+    RofiViewState * state = rofi_view_get_active ();
     if ( state ) {
         // Repaint the view (if needed).
         // After a resize the edit_pixmap surface might not contain anything anymore.
         // If we already re-painted, this does nothing.
-        wayland_rofi_view_maybe_update( state );
+        wayland_rofi_view_maybe_update ( state );
         WlState.repaint_source = 0;
     }
     return G_SOURCE_REMOVE;
@@ -143,21 +143,23 @@ static int rofi_get_location ( RofiViewState *state )
 static void wayland_rofi_view_window_update_size ( RofiViewState * state )
 {
     widget_resize ( WIDGET ( state->main_window ), state->width, state->height );
-    display_set_surface_dimensions ( state->width, state->height, rofi_get_location(state) );
+    display_set_surface_dimensions ( state->width, state->height, rofi_get_location ( state ) );
 }
 
 static void wayland_rofi_view_set_size ( RofiViewState * state, gint width, gint height )
 {
-    if ( width > -1 )
+    if ( width > -1 ) {
         state->width = width;
-    if ( height > -1 )
+    }
+    if ( height > -1 ) {
         state->height = height;
-    wayland_rofi_view_window_update_size(state);
+    }
+    wayland_rofi_view_window_update_size ( state );
 }
 
 static void wayland_rofi_view_get_size ( RofiViewState * state, gint *width, gint *height )
 {
-    *width = state->width;
+    *width  = state->width;
     *height = state->height;
 }
 
@@ -233,15 +235,15 @@ static void wayland___create_window ( MenuFlags menu_flags )
     TICK_N ( "create cairo surface" );
     // TODO should we update the drawable each time?
     PangoContext *p = pango_context_new (  );
-    pango_context_set_font_map(p, pango_cairo_font_map_get_default());
+    pango_context_set_font_map ( p, pango_cairo_font_map_get_default () );
     TICK_N ( "pango cairo font setup" );
 
-    WlState.flags       = menu_flags;
+    WlState.flags = menu_flags;
     // Setup dpi
     // FIXME: use scale, cairo_surface_set_device_scale
     // Setup font.
     // Dummy widget.
-    container *win  = container_create ( NULL, "window.box" );
+    container  *win  = container_create ( NULL, "window.box" );
     const char *font = rofi_theme_get_string ( WIDGET ( win ), "font", config.menu_font );
     if ( font ) {
         PangoFontDescription *pfd = pango_font_description_from_string ( font );
@@ -278,8 +280,8 @@ static void wayland_rofi_view_calculate_window_width ( RofiViewState *state )
     else {
         int width = 1920;
         // Calculate as float to stop silly, big rounding down errors.
-        display_get_surface_dimensions( &width, NULL );
-        state->width = config.menu_width < 101 ? ( (float)width / 100.0f ) * ( float ) config.menu_width : config.menu_width;
+        display_get_surface_dimensions ( &width, NULL );
+        state->width = config.menu_width < 101 ? ( (float) width / 100.0f ) * ( float ) config.menu_width : config.menu_width;
     }
     // Use theme configured width, if set.
     RofiDistance width = rofi_theme_get_distance ( WIDGET ( state->main_window ), "width", state->width );
@@ -294,10 +296,10 @@ static void wayland_rofi_view_update ( RofiViewState *state, gboolean qr )
     g_debug ( "Redraw view" );
     TICK ();
     if ( state->pool == NULL ) {
-        state->pool = display_buffer_pool_new(state->width, state->height);
+        state->pool = display_buffer_pool_new ( state->width, state->height );
     }
-    cairo_surface_t *surface = display_buffer_pool_get_next_buffer(state->pool);
-    cairo_t *d = cairo_create(surface);
+    cairo_surface_t *surface = display_buffer_pool_get_next_buffer ( state->pool );
+    cairo_t         *d       = cairo_create ( surface );
     cairo_set_operator ( d, CAIRO_OPERATOR_SOURCE );
     // Paint the background transparent.
     cairo_set_source_rgba ( d, 0, 0, 0, 0.0 );
@@ -311,7 +313,7 @@ static void wayland_rofi_view_update ( RofiViewState *state, gboolean qr )
     widget_draw ( WIDGET ( state->main_window ), d );
 
     TICK_N ( "widgets" );
-    cairo_destroy(d);
+    cairo_destroy ( d );
     display_surface_commit ( surface );
 
     if ( qr ) {
@@ -360,7 +362,7 @@ static int wayland_rofi_view_calculate_window_height ( RofiViewState *state )
 {
     if ( WlState.fullscreen == TRUE ) {
         int height = 1080;
-        display_get_surface_dimensions( NULL, &height );
+        display_get_surface_dimensions ( NULL, &height );
         return height;
     }
 
@@ -403,36 +405,36 @@ static void wayland_rofi_view_pool_refresh ( void )
     RofiViewState *state = rofi_view_get_active ();
     display_buffer_pool_free ( state->pool );
     state->pool = NULL;
-    wayland_rofi_view_update ( state, TRUE);
+    wayland_rofi_view_update ( state, TRUE );
 }
 
 static view_proxy view_ = {
-    .update = wayland_rofi_view_update,
-    .maybe_update = wayland_rofi_view_maybe_update,
+    .update                = wayland_rofi_view_update,
+    .maybe_update          = wayland_rofi_view_maybe_update,
     .temp_configure_notify = NULL,
-    .temp_click_to_exit = NULL,
-    .frame_callback = wayland_rofi_view_frame_callback,
-    .queue_redraw = wayland_rofi_view_queue_redraw,
+    .temp_click_to_exit    = NULL,
+    .frame_callback        = wayland_rofi_view_frame_callback,
+    .queue_redraw          = wayland_rofi_view_queue_redraw,
 
-    .set_window_title = wayland_rofi_view_set_window_title,
+    .set_window_title          = wayland_rofi_view_set_window_title,
     .calculate_window_position = wayland_rofi_view_calculate_window_position,
-    .calculate_window_height = wayland_rofi_view_calculate_window_height,
-    .calculate_window_width = wayland_rofi_view_calculate_window_width,
-    .window_update_size = wayland_rofi_view_window_update_size,
+    .calculate_window_height   = wayland_rofi_view_calculate_window_height,
+    .calculate_window_width    = wayland_rofi_view_calculate_window_width,
+    .window_update_size        = wayland_rofi_view_window_update_size,
 
     .cleanup = wayland_rofi_view_cleanup,
-    .hide = wayland_rofi_view_hide,
-    .reload = wayland_rofi_view_reload,
+    .hide    = wayland_rofi_view_hide,
+    .reload  = wayland_rofi_view_reload,
 
-    .__create_window = wayland___create_window,
-    .get_window = NULL,
+    .__create_window     = wayland___create_window,
+    .get_window          = NULL,
     .get_current_monitor = wayland_rofi_view_get_current_monitor,
-    .capture_screenshot = wayland_rofi_view_capture_screenshot,
+    .capture_screenshot  = wayland_rofi_view_capture_screenshot,
 
     .set_size = wayland_rofi_view_set_size,
     .get_size = wayland_rofi_view_get_size,
 
-    .pool_refresh = wayland_rofi_view_pool_refresh,
+    .pool_refresh              = wayland_rofi_view_pool_refresh,
 };
 
-const view_proxy *wayland_view_proxy = &view_;
+const view_proxy  *wayland_view_proxy = &view_;

@@ -326,6 +326,6 @@ extern const struct _view_proxy *xcb_view_proxy;
 extern const struct _view_proxy *wayland_view_proxy;
 #endif
 
-void view_init( const struct _view_proxy *view_in );
+void view_init ( const struct _view_proxy *view_in );
 
 #endif

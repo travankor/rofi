@@ -1460,16 +1460,16 @@ static const struct _view_proxy* xcb_display_view_proxy ( void )
     return xcb_view_proxy;
 }
 
-static display_proxy display_ = {
-    .setup = xcb_display_setup,
-    .late_setup = xcb_display_late_setup,
-    .early_cleanup = xcb_display_early_cleanup,
-    .cleanup =  xcb_display_cleanup,
-    .dump_monitor_layout = xcb_display_dump_monitor_layout,
+static display_proxy  display_ = {
+    .setup                = xcb_display_setup,
+    .late_setup           = xcb_display_late_setup,
+    .early_cleanup        = xcb_display_early_cleanup,
+    .cleanup              = xcb_display_cleanup,
+    .dump_monitor_layout  = xcb_display_dump_monitor_layout,
     .startup_notification = xcb_display_startup_notification,
-    .monitor_active = xcb_display_monitor_active,
+    .monitor_active       = xcb_display_monitor_active,
 
-    .view = xcb_display_view_proxy,
+    .view                 = xcb_display_view_proxy,
 };
 
 display_proxy * const xcb_proxy = &display_;

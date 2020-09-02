@@ -67,7 +67,7 @@
 
 static const view_proxy *proxy;
 
-void view_init( const view_proxy *view_in )
+void view_init ( const view_proxy *view_in )
 {
     proxy = view_in;
 }
@@ -76,12 +76,12 @@ void view_init( const view_proxy *view_in )
 GThreadPool *tpool = NULL;
 
 /** Global pointer to the currently active RofiViewState */
-RofiViewState *current_active_menu = NULL;
+RofiViewState                 *current_active_menu = NULL;
 
 struct _rofi_view_cache_state CacheState = {
-    .main_window    = XCB_WINDOW_NONE,
-    .flags          = MENU_NORMAL,
-    .views          = G_QUEUE_INIT,
+    .main_window = XCB_WINDOW_NONE,
+    .flags       = MENU_NORMAL,
+    .views       = G_QUEUE_INIT,
 };
 
 static char * get_matching_state ( void )
@@ -138,7 +138,8 @@ static void rofi_view_reload_message_bar ( RofiViewState *state )
     }
 }
 
-void rofi_view_restart ( RofiViewState *state ) {
+void rofi_view_restart ( RofiViewState *state )
+{
     state->quit = FALSE;
     state->retv = MENU_CANCEL;
 }
@@ -1334,31 +1335,38 @@ void rofi_view_switch_mode ( RofiViewState *state, Mode *mode )
 
 /** ------ */
 
-void rofi_view_update ( RofiViewState *state, gboolean qr ) {
+void rofi_view_update ( RofiViewState *state, gboolean qr )
+{
     proxy->update ( state, qr );
 }
 
-void rofi_view_maybe_update ( RofiViewState *state ) {
+void rofi_view_maybe_update ( RofiViewState *state )
+{
     proxy->maybe_update ( state );
 }
 
-void rofi_view_temp_configure_notify ( RofiViewState *state, xcb_configure_notify_event_t *xce ) {
+void rofi_view_temp_configure_notify ( RofiViewState *state, xcb_configure_notify_event_t *xce )
+{
     proxy->temp_configure_notify ( state, xce );
 }
 
-void rofi_view_temp_click_to_exit ( RofiViewState *state, xcb_window_t target ) {
+void rofi_view_temp_click_to_exit ( RofiViewState *state, xcb_window_t target )
+{
     proxy->temp_click_to_exit ( state, target );
 }
 
-void rofi_view_frame_callback ( void ) {
+void rofi_view_frame_callback ( void )
+{
     proxy->frame_callback ( );
 }
 
-void rofi_view_queue_redraw ( void ) {
+void rofi_view_queue_redraw ( void )
+{
     proxy->queue_redraw ( );
 }
 
-void rofi_view_set_window_title ( const char * title ) {
+void rofi_view_set_window_title ( const char * title )
+{
     proxy->set_window_title ( title );
 }
 
@@ -1367,7 +1375,8 @@ void rofi_view_calculate_window_position ( RofiViewState * state )
     proxy->calculate_window_position ( state );
 }
 
-void rofi_view_calculate_window_width ( struct RofiViewState *state ) {
+void rofi_view_calculate_window_width ( struct RofiViewState *state )
+{
     proxy->calculate_window_width ( state );
 }
 
@@ -1381,42 +1390,52 @@ void rofi_view_window_update_size ( RofiViewState * state )
     proxy->window_update_size ( state );
 }
 
-void rofi_view_cleanup ( void ) {
+void rofi_view_cleanup ( void )
+{
     proxy->cleanup ( );
 }
 
-void rofi_view_hide ( void ) {
+void rofi_view_hide ( void )
+{
     proxy->hide ( );
 }
 
-void rofi_view_reload ( void  ) {
+void rofi_view_reload ( void  )
+{
     proxy->reload ( );
 }
 
-void __create_window ( MenuFlags menu_flags ) {
+void __create_window ( MenuFlags menu_flags )
+{
     proxy->__create_window ( menu_flags );
 }
 
-xcb_window_t rofi_view_get_window ( void ) {
+xcb_window_t rofi_view_get_window ( void )
+{
     return proxy->get_window ( );
 }
 
-void rofi_view_get_current_monitor ( int *width, int *height ) {
+void rofi_view_get_current_monitor ( int *width, int *height )
+{
     proxy->get_current_monitor ( width, height );
 }
 
-void rofi_capture_screenshot ( void ) {
+void rofi_capture_screenshot ( void )
+{
     proxy->capture_screenshot ( );
 }
 
-void rofi_view_set_size ( RofiViewState * state, gint width, gint height ) {
+void rofi_view_set_size ( RofiViewState * state, gint width, gint height )
+{
     proxy->set_size ( state, width, height );
 }
 
-void rofi_view_get_size ( RofiViewState * state, gint *width, gint *height ) {
+void rofi_view_get_size ( RofiViewState * state, gint *width, gint *height )
+{
     proxy->get_size ( state, width, height );
 }
 
-void rofi_view_pool_refresh ( void ) {
+void rofi_view_pool_refresh ( void )
+{
     proxy->pool_refresh ( );
 }

@@ -10,22 +10,22 @@
 
 static const display_proxy *proxy;
 
-void display_init( const display_proxy *disp_in )
+void display_init ( const display_proxy *disp_in )
 {
     proxy = disp_in;
-    view_init( proxy->view() );
+    view_init ( proxy->view () );
 }
 
 int
 monitor_active ( workarea *mon )
 {
-    return proxy->monitor_active( mon );
+    return proxy->monitor_active ( mon );
 }
 
 gboolean
 display_setup ( GMainLoop *main_loop, NkBindings *bindings )
 {
-    return proxy->setup( main_loop, bindings );
+    return proxy->setup ( main_loop, bindings );
 }
 
 gboolean

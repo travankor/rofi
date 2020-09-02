@@ -185,21 +185,21 @@ static void xcb_rofi_view_capture_screenshot ( void )
     g_date_time_unref ( now );
 }
 
-
 /**
  * Code used for benchmarking drawing the gui, this will keep updating the UI as fast as possible.
  */
 gboolean do_bench = TRUE;
-struct {
-    GTimer *time;
+struct
+{
+    GTimer   *time;
     uint64_t draws;
-    double last_ts;
-    double min;
+    double   last_ts;
+    double   min;
 } BenchMark = {
-    .time = NULL,
-    .draws = 0,
+    .time    = NULL,
+    .draws   = 0,
     .last_ts = 0.0,
-    .min = G_MAXDOUBLE
+    .min     = G_MAXDOUBLE
 };
 
 static gboolean bench_update ( void )
@@ -209,17 +209,17 @@ static gboolean bench_update ( void )
     }
     BenchMark.draws++;
     if ( BenchMark.time == NULL ) {
-        BenchMark.time = g_timer_new();
+        BenchMark.time = g_timer_new ();
     }
 
-    if ( (BenchMark.draws & 1023) == 0 ){
-        double ts = g_timer_elapsed(BenchMark.time, NULL);
-        double fps = 1024/(ts-BenchMark.last_ts);
+    if ( ( BenchMark.draws & 1023 ) == 0 ) {
+        double ts  = g_timer_elapsed ( BenchMark.time, NULL );
+        double fps = 1024 / ( ts - BenchMark.last_ts );
 
         if ( fps < BenchMark.min ) {
             BenchMark.min = fps;
         }
-        printf("current: %.2f fps, avg: %.2f fps, min: %.2f fps, %lu draws\r\n", fps, BenchMark.draws/ts, BenchMark.min, BenchMark.draws);
+        printf ( "current: %.2f fps, avg: %.2f fps, min: %.2f fps, %lu draws\r\n", fps, BenchMark.draws / ts, BenchMark.min, BenchMark.draws );
 
         BenchMark.last_ts = ts;
     }
@@ -228,7 +228,7 @@ static gboolean bench_update ( void )
 
 static gboolean xcb_rofi_view_repaint ( G_GNUC_UNUSED void * data  )
 {
-    RofiViewState * state = rofi_view_get_active();
+    RofiViewState * state = rofi_view_get_active ();
     if ( state  ) {
         // Repaint the view (if needed).
         // After a resize the edit_pixmap surface might not contain anything anymore.
@@ -242,7 +242,7 @@ static gboolean xcb_rofi_view_repaint ( G_GNUC_UNUSED void * data  )
         TICK_N ( "flush" );
         XcbState.repaint_source = 0;
     }
-    return (bench_update () == TRUE )? G_SOURCE_CONTINUE:G_SOURCE_REMOVE;
+    return ( bench_update () == TRUE ) ? G_SOURCE_CONTINUE : G_SOURCE_REMOVE;
 }
 
 static void xcb_rofi_view_update ( RofiViewState *state, gboolean qr )
@@ -505,7 +505,7 @@ static void xcb_rofi_view_setup_fake_transparency ( const char* const fake_backg
         else {
             char *fpath = rofi_expand_path ( fake_background );
             g_debug ( "Opening %s to use as background.", fpath );
-            s                     = cairo_image_surface_create_from_png ( fpath );
+            s                   = cairo_image_surface_create_from_png ( fpath );
             XcbState.fake_bgrel = TRUE;
             g_free ( fpath );
         }
@@ -603,8 +603,9 @@ static void xcb___create_window ( MenuFlags menu_flags )
         PangoFontMap *font_map = pango_cairo_font_map_get_default ();
         pango_cairo_font_map_set_resolution ( (PangoCairoFontMap *) font_map, dpi );
         config.dpi = dpi;
-    } else {
-	// default pango is 96.
+    }
+    else {
+        // default pango is 96.
         PangoFontMap *font_map = pango_cairo_font_map_get_default ();
         config.dpi = pango_cairo_font_map_get_resolution ( (PangoCairoFontMap *) font_map );
     }
@@ -842,30 +843,30 @@ static void xcb_rofi_view_set_window_title ( const char * title )
 }
 
 static view_proxy view_ = {
-    .update = xcb_rofi_view_update,
-    .maybe_update = xcb_rofi_view_maybe_update,
+    .update                = xcb_rofi_view_update,
+    .maybe_update          = xcb_rofi_view_maybe_update,
     .temp_configure_notify = xcb_rofi_view_temp_configure_notify,
-    .temp_click_to_exit = xcb_rofi_view_temp_click_to_exit,
-    .frame_callback = xcb_rofi_view_frame_callback,
-    .queue_redraw = xcb_rofi_view_queue_redraw,
+    .temp_click_to_exit    = xcb_rofi_view_temp_click_to_exit,
+    .frame_callback        = xcb_rofi_view_frame_callback,
+    .queue_redraw          = xcb_rofi_view_queue_redraw,
 
-    .set_window_title = xcb_rofi_view_set_window_title,
+    .set_window_title          = xcb_rofi_view_set_window_title,
     .calculate_window_position = xcb_rofi_view_calculate_window_position,
-    .calculate_window_width = xcb_rofi_view_calculate_window_width,
-    .calculate_window_height = xcb_rofi_view_calculate_window_height,
-    .window_update_size = xcb_rofi_view_window_update_size,
+    .calculate_window_width    = xcb_rofi_view_calculate_window_width,
+    .calculate_window_height   = xcb_rofi_view_calculate_window_height,
+    .window_update_size        = xcb_rofi_view_window_update_size,
 
     .cleanup = xcb_rofi_view_cleanup,
-    .hide = xcb_rofi_view_hide,
-    .reload = xcb_rofi_view_reload,
+    .hide    = xcb_rofi_view_hide,
+    .reload  = xcb_rofi_view_reload,
 
-    .__create_window = xcb___create_window,
-    .get_window = xcb_rofi_view_get_window,
+    .__create_window     = xcb___create_window,
+    .get_window          = xcb_rofi_view_get_window,
     .get_current_monitor = xcb_rofi_view_get_current_monitor,
-    .capture_screenshot = xcb_rofi_view_capture_screenshot,
+    .capture_screenshot  = xcb_rofi_view_capture_screenshot,
 
     .set_size = NULL,
     .get_size = NULL,
 };
 
-const view_proxy *xcb_view_proxy = &view_;
+const view_proxy  *xcb_view_proxy = &view_;

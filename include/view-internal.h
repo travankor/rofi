@@ -132,7 +132,7 @@ struct RofiViewState
 #ifdef ENABLE_WAYLAND
     /** wayland */
     display_buffer_pool *pool;
-    gboolean frame_callback;
+    gboolean            frame_callback;
 #endif
 
     /** Position and target of the mouse. */
@@ -151,34 +151,35 @@ struct RofiViewState
 };
 /** @} */
 
-typedef struct _view_proxy {
-    void (*update) ( RofiViewState *state, gboolean qr );
-    void (*maybe_update) ( RofiViewState *state );
-    void (*temp_configure_notify) ( RofiViewState *state, xcb_configure_notify_event_t *xce );
-    void (*temp_click_to_exit) ( RofiViewState *state, xcb_window_t target );
-    void (*frame_callback) ( void );
+typedef struct _view_proxy
+{
+    void ( *update )( RofiViewState *state, gboolean qr );
+    void ( *maybe_update )( RofiViewState *state );
+    void ( *temp_configure_notify )( RofiViewState *state, xcb_configure_notify_event_t *xce );
+    void ( *temp_click_to_exit )( RofiViewState *state, xcb_window_t target );
+    void ( *frame_callback )( void );
 
-    void (*queue_redraw) ( void );
+    void ( *queue_redraw )( void );
 
-    void (*set_window_title) ( const char * title );
-    void (*calculate_window_position) ( RofiViewState *state );
-    void (*calculate_window_width) ( RofiViewState *state );
-    int (*calculate_window_height) ( RofiViewState *state );
-    void (*window_update_size) ( RofiViewState *state );
+    void ( *set_window_title )( const char * title );
+    void ( *calculate_window_position )( RofiViewState *state );
+    void ( *calculate_window_width )( RofiViewState *state );
+    int ( *calculate_window_height )( RofiViewState *state );
+    void ( *window_update_size )( RofiViewState *state );
 
-    void (*cleanup) ( void );
-    void (*hide) ( void );
-    void (*reload) ( void  );
-    void (*__create_window) ( MenuFlags menu_flags );
-    xcb_window_t (*get_window) ( void );
+    void ( *cleanup )( void );
+    void ( *hide )( void );
+    void ( *reload )( void  );
+    void ( *__create_window )( MenuFlags menu_flags );
+    xcb_window_t ( *get_window )( void );
 
-    void (*get_current_monitor) ( int *width, int *height );
-    void (*capture_screenshot) ( void );
+    void ( *get_current_monitor )( int *width, int *height );
+    void ( *capture_screenshot )( void );
 
-    void (*set_size) ( RofiViewState * state, gint width, gint height );
-    void (*get_size) ( RofiViewState * state, gint *width, gint *height );
+    void ( *set_size )( RofiViewState * state, gint width, gint height );
+    void ( *get_size )( RofiViewState * state, gint *width, gint *height );
 
-    void (*pool_refresh) ( );
+    void ( *pool_refresh )( );
 } view_proxy;
 
 /**
@@ -187,11 +188,11 @@ typedef struct _view_proxy {
 struct _rofi_view_cache_state
 {
     /** main x11 windows */
-    xcb_window_t       main_window;
+    xcb_window_t main_window;
     /** Main flags */
-    MenuFlags          flags;
+    MenuFlags    flags;
     /** List of stacked views */
-    GQueue             views;
+    GQueue       views;
 };
 extern struct _rofi_view_cache_state CacheState;
 

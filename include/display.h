@@ -64,7 +64,7 @@ extern struct _display_proxy * const xcb_proxy;
 extern struct _display_proxy * const wayland_proxy;
 #endif
 
-void display_init( const struct _display_proxy *disp_in );
+void display_init ( const struct _display_proxy *disp_in );
 
 /**
  * @param mon workarea to be filled in.
