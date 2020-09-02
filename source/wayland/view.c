@@ -241,8 +241,8 @@ static void wayland___create_window ( MenuFlags menu_flags )
     WlState.flags = menu_flags;
     // Setup font.
     // Dummy widget.
-    box *box  = box_create ( NULL, "window", ROFI_ORIENTATION_HORIZONTAL );
-    const char *font = rofi_theme_get_string ( WIDGET ( box ), "font", config.menu_font );
+    box *win  = box_create ( NULL, "window", ROFI_ORIENTATION_HORIZONTAL );
+    const char *font = rofi_theme_get_string ( WIDGET ( win ), "font", config.menu_font );
     if ( font ) {
         PangoFontDescription *pfd = pango_font_description_from_string ( font );
         if ( helper_validate_font ( pfd, font ) ) {
@@ -259,7 +259,10 @@ static void wayland___create_window ( MenuFlags menu_flags )
     // cleanup
     g_object_unref ( p );
 
-    widget_free ( WIDGET ( box ) );
+    WlState.fullscreen = rofi_theme_get_boolean ( WIDGET ( win ), "fullscreen", config.fullscreen );
+
+    widget_free ( WIDGET ( win ) );
+
     TICK_N ( "done" );
 }
 
@@ -270,12 +273,18 @@ static void wayland___create_window ( MenuFlags menu_flags )
  */
 static void wayland_rofi_view_calculate_window_width ( RofiViewState *state )
 {
+    if ( WlState.fullscreen == TRUE ) {
+        int width = 1280;
+        display_get_surface_dimensions ( &width, NULL );
+        state->width = width;
+        return;
+    }
+
     if ( config.menu_width < 0 ) {
         double fw = textbox_get_estimated_char_width ( );
         state->width  = -( fw * config.menu_width );
         state->width += widget_padding_get_padding_width ( WIDGET ( state->main_window ) );
-    }
-    else {
+    } else {
         int width = 1920;
         // Calculate as float to stop silly, big rounding down errors.
         display_get_surface_dimensions ( &width, NULL );
