@@ -149,6 +149,15 @@ RofiViewState * rofi_view_get_active ( void )
     return current_active_menu;
 }
 
+void rofi_view_remove_active ( RofiViewState *state )
+{
+  if ( state == current_active_menu ) {
+    rofi_view_set_active ( NULL );
+  }
+  else if ( state ) {
+    g_queue_remove ( &(CacheState.views ), state);
+  }
+}
 void rofi_view_set_active ( RofiViewState *state )
 {
     if ( current_active_menu != NULL && state != NULL ) {
@@ -698,7 +707,7 @@ static void rofi_view_trigger_global_action ( KeyBindingAction action )
         if ( selected < state->filtered_lines ) {
             ( state->selected_line ) = state->line_map[selected];
         }
-        state->retv = MENU_QUICK_SWITCH | ( ( action - CUSTOM_1 ) & MENU_LOWER_MASK );
+        state->retv = MENU_CUSTOM_COMMAND | ( ( action - CUSTOM_1 ) & MENU_LOWER_MASK );
         state->quit = TRUE;
         break;
     }

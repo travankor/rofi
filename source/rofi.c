@@ -208,7 +208,7 @@ static void run_switcher ( ModeMode mode )
 void process_result ( RofiViewState *state )
 {
     Mode *sw = state->sw;
-    rofi_view_set_active ( NULL );
+ //   rofi_view_set_active ( NULL );
     if ( sw != NULL ) {
         unsigned int selected_line = rofi_view_get_selected_line ( state );;
         MenuReturn   mretv         = rofi_view_get_return_value ( state );
@@ -246,11 +246,17 @@ void process_result ( RofiViewState *state )
              * Load in the new mode.
              */
             rofi_view_switch_mode ( state, modi[mode] );
-            rofi_view_set_active ( state );
             curr_switcher = mode;
             return;
+        } else {
+          // On exit, free current view, and pop to one above.
+          rofi_view_remove_active ( state );
+          rofi_view_free ( state );
+          return;
         }
     }
+//    rofi_view_set_active ( NULL );
+          rofi_view_remove_active ( state );
     rofi_view_free ( state );
 }
 
@@ -291,7 +297,7 @@ static void print_main_application_options ( int is_term )
     print_help_msg ( "-no-plugins", "", "Disable loading of external plugins.", NULL, is_term );
     print_help_msg ( "-plugin-path", "", "Directory used to search for rofi plugins. *DEPRECATED*", NULL, is_term );
     print_help_msg ( "-dump-config", "", "Dump the current configuration in rasi format and exit.", NULL, is_term );
-    print_help_msg ( "-upgrade-config", "", "Upgrade the old-style configuration fiel in the new rasi format and exit.", NULL, is_term );
+    print_help_msg ( "-upgrade-config", "", "Upgrade the old-style configuration file in the new rasi format and exit.", NULL, is_term );
     print_help_msg ( "-dump-theme", "", "Dump the current theme in rasi format and exit.", NULL, is_term );
 }
 static void help ( G_GNUC_UNUSED int argc, char **argv )

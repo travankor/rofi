@@ -142,6 +142,9 @@ static int rofi_get_location ( RofiViewState *state )
 
 static void wayland_rofi_view_window_update_size ( RofiViewState * state )
 {
+    if ( state == NULL ) {
+        return;
+    }
     widget_resize ( WIDGET ( state->main_window ), state->width, state->height );
     display_set_surface_dimensions ( state->width, state->height, rofi_get_location ( state ) );
 }

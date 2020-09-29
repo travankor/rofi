@@ -9,7 +9,7 @@
 The need for a new theme format was motivated by the fact that the way rofi handled widgets has changed. From a very
 static drawing of lines and text to a nice structured form of packing widgets. This change made it possible to provide a
 more flexible theme framework. The old theme format and config file are not flexible enough to expose these options in a
-user-friendly way. Therefor, a new file format has been created, replacing the old one.
+user-friendly way. Therefore, a new file format has been created, replacing the old one.
 
 ## FORMAT SPECIFICATION
 
@@ -364,11 +364,13 @@ width: calc( 100% - 37px );
 
 It supports the following operations:
 
-* `+`: Add
-* `-`: Subtract
-* `/`: Divide
-* `*`: Multiply
-* `%`: Multiply
+* `+`   : Add
+* `-`   : Subtract
+* `/`   : Divide
+* `*`   : Multiply
+* `%`   : Multiply
+* `min` : Minimum of l or rvalue;
+* `max` : Maximum of l or rvalue;
 
 It uses the C precedence ordering.
 
@@ -985,21 +987,29 @@ rofi -dump-theme
 Parts of the theme can be conditionally loaded, like the CSS `@media` option.
 
 ```
-@media ( min-width: 120px ) {
+@media ( min-width: 120 ) {
 
 }
 ```
 
 It supports the following keys as constraint:
 
- * `min-width`:         load when width is bigger then value.
+ * `min-width`:         load when width is bigger or equal then value.
  * `max-width`:         load when width is smaller then value.
- * `min-height`:        load when height is bigger then value.
+ * `min-height`:        load when height is bigger or equal then value.
  * `max-height`:        load when height is smaller then value.
  * `min-aspect-ratio`   load when aspect ratio is over value.
- * `max-aspect_ratio`:  load when aspect ratio is under value.
+ * `max-aspect-ratio`:  load when aspect ratio is under value.
  * `monitor-id`:        The monitor id, see rofi -help for id's.
 
+@media takes an integer number or a fraction, for integer number `px` can be added.
+
+
+```
+@media ( min-width: 120 px ) {
+
+}
+```
 
 ## Multiple file handling
 

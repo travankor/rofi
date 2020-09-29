@@ -927,7 +927,7 @@ default: {w}  {c}   {t}
 \fB\fC\-window\-command\fR \fIcmd\fP
 
 .PP
-Set command to execute on selected window for a custom action.
+Set command to execute on selected window for a alt action (\fB\fC\-kb\-accept\-alt\fR).
 See \fIPATTERN\fP\&.
 
 .PP
@@ -1013,7 +1013,7 @@ Specify the prompt to show in \fB\fCdmenu\fR mode. For example, select 'monkey',
 .RS
 
 .nf
-echo "a|b|c|d|e" | rofi \-sep '|' \-dmenu \-p "monkey:"
+echo "a|b|c|d|e" | rofi \-sep '|' \-dmenu \-p "monkey"
 
 .fi
 .RE
@@ -1518,6 +1518,9 @@ Pressing the \fB\fCdelete\-entry\fR binding (\fB\fCshift\-delete\fR) will kill t
 Pressing the \fB\fCaccept\-custom\fR binding (\fB\fCcontrol\-enter\fR or \fB\fCshift\-enter\fR) will run a command on the window.
 (See option \fB\fCwindow\-command\fR );
 
+.PP
+If there is no match, it will try to launch the input.
+
 .SS run
 .PP
 Shows a list of executables in \fB\fC$PATH\fR and can launch them (optional in a terminal).
@@ -1529,7 +1532,7 @@ Pressing the \fB\fCaccept\-custom\fR binding (\fB\fCcontrol\-enter\fR or \fB\fCs
 Same as the \fBrun\fP launches, but the list is created from the installed desktop files. It automatically launches them
 in a terminal if specified in the Desktop File.
 Pressing the \fB\fCdelete\-entry\fR binding (\fB\fCshift\-delete\fR) will remove this entry from the run history.
-Pressing the \fB\fCaccept\-custom\fR binding (\fB\fCcontrol\-enter\fR or \fB\fCshift\-enter\fR) with custom input (no entry matching) will run the command in a terminal.
+Pressing the \fB\fCaccept\-custom\fR binding (\fB\fCcontrol\-enter\fR or \fB\fCshift\-enter\fR) will run the command in a terminal.
 
 .SS ssh
 .PP
@@ -1553,6 +1556,9 @@ All modi that match the bang as a prefix are included.
 For example, say you have specified \fB\fC\-combi\-modi run,window,windowcd\fR\&. If your
 query begins with the bang \fB\fC!w\fR, only results from the \fB\fCwindow\fR and \fB\fCwindowcd\fR
 modi are shown, even if the rest of the input text would match results from \fB\fCrun\fR\&.
+
+.PP
+If no match, the input is handled by the first combined modi.
 
 .SH FAQ
 .SS The text in the window switcher is not nicely aligned.

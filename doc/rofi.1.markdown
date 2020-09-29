@@ -547,7 +547,7 @@ default: {w}  {c}   {t}
 
 `-window-command` *cmd*
 
-Set command to execute on selected window for a custom action.
+Set command to execute on selected window for a alt action (`-kb-accept-alt`).
 See *PATTERN*.
 
 Default: *"wmctrl -i -R {window}"*
@@ -604,7 +604,7 @@ Separator for `dmenu`. Example: To show a list of 'a' to 'e' with '|' as a separ
 
 Specify the prompt to show in `dmenu` mode. For example, select 'monkey', a,b,c,d, or e.
 
-    echo "a|b|c|d|e" | rofi -sep '|' -dmenu -p "monkey:"
+    echo "a|b|c|d|e" | rofi -sep '|' -dmenu -p "monkey"
 
 Default: *dmenu*
 
@@ -921,6 +921,8 @@ Pressing the `delete-entry` binding (`shift-delete`) will kill the window.
 Pressing the `accept-custom` binding (`control-enter` or `shift-enter`) will run a command on the window.
 (See option `window-command` );
 
+If there is no match, it will try to launch the input.
+
 ### run
 
 Shows a list of executables in `$PATH` and can launch them (optional in a terminal).
@@ -932,7 +934,7 @@ Pressing the `accept-custom` binding (`control-enter` or `shift-enter`) will run
 Same as the **run** launches, but the list is created from the installed desktop files. It automatically launches them
 in a terminal if specified in the Desktop File.
 Pressing the `delete-entry` binding (`shift-delete`) will remove this entry from the run history.
-Pressing the `accept-custom` binding (`control-enter` or `shift-enter`) with custom input (no entry matching) will run the command in a terminal.
+Pressing the `accept-custom` binding (`control-enter` or `shift-enter`) will run the command in a terminal.
 
 ### ssh
 
@@ -955,6 +957,8 @@ All modi that match the bang as a prefix are included.
 For example, say you have specified `-combi-modi run,window,windowcd`. If your
 query begins with the bang `!w`, only results from the `window` and `windowcd`
 modi are shown, even if the rest of the input text would match results from `run`.
+
+If no match, the input is handled by the first combined modi.
 
 ## FAQ
 

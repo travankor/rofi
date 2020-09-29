@@ -432,6 +432,9 @@ static void xcb_rofi_view_calculate_window_position ( RofiViewState *state )
 
 static void xcb_rofi_view_window_update_size ( RofiViewState * state )
 {
+    if ( state == NULL ) {
+        return;
+    }
     uint16_t mask   = XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT;
     uint32_t vals[] = { state->x, state->y, state->width, state->height };
 
