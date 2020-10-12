@@ -1046,13 +1046,13 @@ wayland_display_setup ( GMainLoop *main_loop, NkBindings *bindings )
 
     wayland->wlr_surface = zwlr_layer_shell_v1_get_layer_surface ( wayland->layer_shell, wayland->surface, NULL, ZWLR_LAYER_SHELL_V1_LAYER_TOP, "rofi" );
 
-    // ANCHOR_LEFT is needed to get the full screen width
-    zwlr_layer_surface_v1_set_anchor ( wayland->wlr_surface, ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP | ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT );
+    // Set size zero and anchor on all corners to get the usable screen size
+    // see https://github.com/swaywm/wlroots/pull/2422
+    zwlr_layer_surface_v1_set_anchor ( wayland->wlr_surface, ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP | ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM | ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT );
+    zwlr_layer_surface_v1_set_size ( wayland->wlr_surface, 0, 0 );
     zwlr_layer_surface_v1_set_keyboard_interactivity ( wayland->wlr_surface, 1 );
     zwlr_layer_surface_v1_add_listener ( wayland->wlr_surface, &wayland_layer_shell_surface_listener, NULL );
 
-    // By setting 0 here, we'll get some useful sizes in the configure event
-    zwlr_layer_surface_v1_set_size ( wayland->wlr_surface, 0, 0 );
     wl_surface_add_listener ( wayland->surface, &wayland_surface_interface, wayland );
     wl_surface_commit ( wayland->surface );
     wl_display_roundtrip ( wayland->display );
@@ -1120,6 +1120,14 @@ display_set_surface_dimensions ( int width, int height, int loc )
     default:
         break;
     }
+
+    if ( height == 0 ) {
+        wlr_anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_BOTTOM | ZWLR_LAYER_SURFACE_V1_ANCHOR_TOP;
+    }
+    if ( width == 0 ) {
+        wlr_anchor |= ZWLR_LAYER_SURFACE_V1_ANCHOR_LEFT | ZWLR_LAYER_SURFACE_V1_ANCHOR_RIGHT;
+    }
+
     zwlr_layer_surface_v1_set_anchor ( wayland->wlr_surface, wlr_anchor );
 }
 
