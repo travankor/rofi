@@ -42,6 +42,8 @@
 #include <stdint.h>
 #include <jpeglib.h>
 
+#include <setjmp.h>
+
 typedef struct
 {
     // Context for icon-themes.
@@ -171,11 +173,29 @@ static cairo_surface_t* cairo_image_surface_create_from_jpeg_private ( struct jp
 
     return surface;
 }
+struct jpegErrorManager {
+    /* "public" fields */
+    struct jpeg_error_mgr pub;
+    /* for return to caller */
+    jmp_buf setjmp_buffer;
+};
+char jpegLastErrorMsg[JMSG_LENGTH_MAX];
+static void jpegErrorExit (j_common_ptr cinfo)
+{
+    /* cinfo->err actually points to a jpegErrorManager struct */
+    struct jpegErrorManager* myerr = (struct jpegErrorManager*) cinfo->err;
+
+    /* Create the message */
+    ( *(cinfo->err->format_message) ) (cinfo, jpegLastErrorMsg);
+    g_warning ( jpegLastErrorMsg );
+
+    /* Jump to the setjmp point */
+    longjmp(myerr->setjmp_buffer, 1);
+}
 
 static cairo_surface_t* cairo_image_surface_create_from_jpeg ( const char* file )
 {
     struct jpeg_decompress_struct cinfo;
-    struct jpeg_error_mgr         jerr;
     cairo_surface_t               * surface;
     FILE                          * infile;
 
@@ -183,7 +203,16 @@ static cairo_surface_t* cairo_image_surface_create_from_jpeg ( const char* file 
         return NULL;
     }
 
-    cinfo.err = jpeg_std_error ( &jerr );
+    struct jpegErrorManager jerr;
+    cinfo.err = jpeg_std_error( &jerr.pub);
+    jerr.pub.error_exit = jpegErrorExit;
+    /* Establish the setjmp return context for my_error_exit to use. */
+    if (setjmp(jerr.setjmp_buffer)) {
+      /* If we get here, the JPEG code has signaled an error. */
+      jpeg_destroy_decompress(&cinfo);
+      fclose(infile);
+      return NULL;
+    }
 
     jpeg_create_decompress ( &cinfo );
     jpeg_stdio_src ( &cinfo, infile );
@@ -223,13 +252,15 @@ static void rofi_icon_fetcher_worker ( thread_state *sdata, G_GNUC_UNUSED gpoint
         }
     }
     cairo_surface_t *icon_surf = NULL;
-    if ( g_str_has_suffix ( icon_path, ".png" ) ) {
+    if ( g_str_has_suffix ( icon_path, ".png" ) || g_str_has_suffix ( icon_path, ".PNG" )  ) {
         icon_surf = cairo_image_surface_create_from_png ( icon_path );
     }
-    else if (  g_str_has_suffix ( icon_path, ".jpeg" ) || g_str_has_suffix ( icon_path, ".jpg" ) ) {
+    else if (  g_str_has_suffix ( icon_path, ".jpeg" ) || g_str_has_suffix ( icon_path, ".jpg" ) ||
+        g_str_has_suffix ( icon_path, ".JPEG" ) || g_str_has_suffix ( icon_path, ".JPG" )
+        ) {
         icon_surf = cairo_image_surface_create_from_jpeg ( icon_path );
     }
-    else if ( g_str_has_suffix ( icon_path, ".svg" ) ) {
+    else if ( g_str_has_suffix ( icon_path, ".svg" ) ||  g_str_has_suffix ( icon_path, ".SVG" ) ) {
         icon_surf = cairo_image_surface_create_from_svg ( icon_path, sentry->size );
     }
     else {

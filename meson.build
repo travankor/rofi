@@ -12,6 +12,7 @@ c_compiler = meson.get_compiler('c')
 add_project_arguments(
     '-I@0@'.format(meson.build_root()),
     '-I@0@'.format(join_paths(meson.source_root(), 'include')),
+    '-D_DEFAULT_SOURCE=1',
     language: 'c'
 )
 
@@ -179,6 +180,7 @@ rofi_sources = files(
         'source/dialogs/help-keys.c',
         'source/xcb/display.c',
         'source/xcb/view.c',
+        'source/dialogs/filebrowser.c',
         'include/display.h',
         'include/xcb.h',
         'include/xcb-internal.h',
@@ -215,6 +217,7 @@ rofi_sources = files(
         'include/dialogs/window.h',
         'include/dialogs/dialogs.h',
         'include/dialogs/help-keys.h',
+        'include/dialogs/filebrowser.h',
         'include/dialogs/dmenuscriptshared.h',
 )
 theme_lexer_sources = files('lexer/theme-lexer.l')

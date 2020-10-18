@@ -324,7 +324,6 @@ void rofi_view_set_window_title ( const char * title  );
  * set ellipsize mode to start.
  */
 void rofi_view_ellipsize_start ( RofiViewState *state );
-/**@}*/
 
 void rofi_view_set_size ( RofiViewState * state, gint width, gint height );
 
@@ -343,4 +342,5 @@ extern const struct _view_proxy *wayland_view_proxy;
 
 void view_init ( const struct _view_proxy *view_in );
 
+/** @}*/
 #endif

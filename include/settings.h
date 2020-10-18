@@ -212,6 +212,8 @@ typedef struct
 
     /** Benchmark */
     gboolean       benchmark_ui;
+
+    gboolean       normalize_match;
 } Settings;
 /** Global Settings structure. */
 extern Settings config;
