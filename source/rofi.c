@@ -858,17 +858,8 @@ int main ( int argc, char *argv[] )
     }
     TICK ();
 
-    const struct _display_proxy *proxy = xcb_proxy;
-    config.backend = DISPLAY_XCB;
-#ifdef ENABLE_WAYLAND
-    if ( find_arg ( "-x11" ) < 0 ) {
-        const gchar *d = g_getenv ( "WAYLAND_DISPLAY" );
-        if ( d != NULL && strlen ( d ) != 0 ) {
-            config.backend = DISPLAY_WAYLAND;
-            proxy          = wayland_proxy;
-        }
-    }
-#endif
+    const struct _display_proxy *proxy = wayland_proxy;
+    config.backend = DISPLAY_WAYLAND;
     display_init ( proxy );
 
     TICK_N ( "Select Backend" );
