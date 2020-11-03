@@ -1043,7 +1043,7 @@ wayland_display_setup ( GMainLoop *main_loop, NkBindings *bindings )
 
     wayland->bindings_seat = nk_bindings_seat_new ( bindings, XKB_CONTEXT_NO_FLAGS );
 
-    wayland->wlr_surface = zwlr_layer_shell_v1_get_layer_surface ( wayland->layer_shell, wayland->surface, NULL, ZWLR_LAYER_SHELL_V1_LAYER_OVERLAY, "rofi" );
+    wayland->wlr_surface = zwlr_layer_shell_v1_get_layer_surface ( wayland->layer_shell, wayland->surface, NULL, ZWLR_LAYER_SHELL_V1_LAYER_TOP, "rofi" );
 
     // Set size zero and anchor on all corners to get the usable screen size
     // see https://github.com/swaywm/wlroots/pull/2422
