@@ -224,7 +224,7 @@ wayland_surface_protocol_enter ( void *data, struct wl_surface *wl_surface, stru
 
         RofiViewState *state = rofi_view_get_active ( );
         if ( state != NULL ) {
-            rofi_view_set_size( state, -1, -1 );
+            rofi_view_set_size ( state, -1, -1 );
         }
     }
 }
@@ -360,7 +360,7 @@ wayland_key_repeat ( void *data )
         return G_SOURCE_REMOVE;
     }
 
-    char *text = nk_bindings_seat_handle_key( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
+    char          *text = nk_bindings_seat_handle_key ( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
 
     RofiViewState *state = rofi_view_get_active ( );
     if ( state == NULL ) {
@@ -385,7 +385,7 @@ wayland_key_repeat_delay ( void *data )
         return FALSE;
     }
 
-    char *text = nk_bindings_seat_handle_key( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
+    char          *text = nk_bindings_seat_handle_key ( wayland->bindings_seat, NULL, self->repeat.key, NK_BINDINGS_KEY_STATE_PRESS );
 
     RofiViewState *state = rofi_view_get_active ( );
     if ( state == NULL ) {
@@ -527,9 +527,8 @@ wayland_pointer_send_events ( wayland_seat *self )
         return;
     }
 
-    if ( self->motion.x > -1 || self->motion.y > -1 )
-    {
-        rofi_view_handle_mouse_motion (state, self->motion.x, self->motion.y);
+    if ( self->motion.x > -1 || self->motion.y > -1 ) {
+        rofi_view_handle_mouse_motion ( state, self->motion.x, self->motion.y );
         self->motion.x = -1;
         self->motion.y = -1;
     }

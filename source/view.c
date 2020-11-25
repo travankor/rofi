@@ -151,12 +151,12 @@ RofiViewState * rofi_view_get_active ( void )
 
 void rofi_view_remove_active ( RofiViewState *state )
 {
-  if ( state == current_active_menu ) {
-    rofi_view_set_active ( NULL );
-  }
-  else if ( state ) {
-    g_queue_remove ( &(CacheState.views ), state);
-  }
+    if ( state == current_active_menu ) {
+        rofi_view_set_active ( NULL );
+    }
+    else if ( state ) {
+        g_queue_remove ( &( CacheState.views ), state );
+    }
 }
 void rofi_view_set_active ( RofiViewState *state )
 {

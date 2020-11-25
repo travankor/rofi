@@ -244,7 +244,7 @@ static void wayland___create_window ( MenuFlags menu_flags )
     WlState.flags = menu_flags;
     // Setup font.
     // Dummy widget.
-    box *win  = box_create ( NULL, "window", ROFI_ORIENTATION_HORIZONTAL );
+    box        *win  = box_create ( NULL, "window", ROFI_ORIENTATION_HORIZONTAL );
     const char *font = rofi_theme_get_string ( WIDGET ( win ), "font", config.menu_font );
     if ( font ) {
         PangoFontDescription *pfd = pango_font_description_from_string ( font );
@@ -287,7 +287,8 @@ static void wayland_rofi_view_calculate_window_width ( RofiViewState *state )
         double fw = textbox_get_estimated_char_width ( );
         state->width  = -( fw * config.menu_width );
         state->width += widget_padding_get_padding_width ( WIDGET ( state->main_window ) );
-    } else {
+    }
+    else {
         int width = 1920;
         // Calculate as float to stop silly, big rounding down errors.
         display_get_surface_dimensions ( &width, NULL );
@@ -308,7 +309,7 @@ static void wayland_rofi_view_update ( RofiViewState *state, gboolean qr )
     if ( state->pool == NULL ) {
         state->pool = display_buffer_pool_new ( state->width, state->height );
     }
-    cairo_surface_t *surface = display_buffer_pool_get_next_buffer (state->pool);
+    cairo_surface_t *surface = display_buffer_pool_get_next_buffer ( state->pool );
     if ( surface == NULL ) {
         // no available buffer, bail out
         return;
