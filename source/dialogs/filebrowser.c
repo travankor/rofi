@@ -147,7 +147,7 @@ static void get_file_browser (  Mode *sw )
                 // Rofi expects utf-8, so lets convert the filename.
                 pd->array[pd->array_length].name           = g_filename_to_utf8 ( rd->d_name, -1, NULL, NULL, NULL );
                 pd->array[pd->array_length].path           = g_build_filename ( cdir, rd->d_name, NULL );
-                pd->array[pd->array_length].type           = ( rd->d_type == DT_DIR )? DIRECTORY: RFILE;
+                pd->array[pd->array_length].type           = ( rd->d_type == DT_DIR ) ? DIRECTORY : RFILE;
                 pd->array[pd->array_length].icon_fetch_uid = 0;
                 pd->array[pd->array_length].link           = FALSE;
                 pd->array_length++;
@@ -348,24 +348,6 @@ static int file_browser_token_match ( const Mode *sw, rofi_int_matcher **tokens,
     return helper_token_match ( tokens, pd->array[index].name );
 }
 
-const char * const image_exts[] = { ".png", ".PNG", ".jpg", ".JPG", ".jpeg", ".JPEG", ".svg", ".SVG" };
-static gboolean file_browser_is_image ( const char * const path )
-{
-    if ( path == NULL ) {
-        return FALSE;
-    }
-    const char *suf = strrchr ( path, '.' );
-    if ( suf == NULL  ) {
-        return FALSE;
-    }
-    for ( uint32_t i = 0; i < ( sizeof ( image_exts ) / sizeof ( char* ) ); i++ ) {
-        if ( g_strcmp0 ( suf, image_exts[i] ) == 0 ) {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
 static cairo_surface_t *_get_icon ( const Mode *sw, unsigned int selected_line, int height )
 {
     FileBrowserModePrivateData *pd = (FileBrowserModePrivateData *) mode_get_private_data ( sw );
@@ -374,7 +356,7 @@ static cairo_surface_t *_get_icon ( const Mode *sw, unsigned int selected_line, 
     if ( dr->icon_fetch_uid > 0 ) {
         return rofi_icon_fetcher_get ( dr->icon_fetch_uid );
     }
-    if ( file_browser_is_image ( dr->path ) ) {
+    if ( rofi_icon_fetcher_file_is_image ( dr->path ) ) {
         dr->icon_fetch_uid = rofi_icon_fetcher_query ( dr->path, height );
     }
     else {

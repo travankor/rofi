@@ -38,7 +38,6 @@
 #include <glib.h>
 #include <cairo.h>
 #include <cairo-xcb.h>
-#include <librsvg/rsvg.h>
 
 #include <xcb/xcb.h>
 #include <xcb/xcb_aux.h>
@@ -65,9 +64,9 @@
 
 #include <rofi.h>
 
-/** Minimal randr prefered for running rofi (1.5) (Major version number) */
+/** Minimal randr preferred for running rofi (1.5) (Major version number) */
 #define RANDR_PREF_MAJOR_VERSION    1
-/** Minimal randr prefered for running rofi (1.5) (Minor version number) */
+/** Minimal randr preferred for running rofi (1.5) (Minor version number) */
 #define RANDR_PREF_MINOR_VERSION    5
 
 /** Checks if the if x and y is inside rectangle. */

@@ -1,5 +1,5 @@
 project('rofi', 'c',
-    version: '1.5.4-dev',
+    version: '1.6.1-wayland',
     meson_version: '>=0.47.0',
     license: [ 'MIT' ],
     default_options: [
@@ -47,9 +47,7 @@ deps = [
     dependency('pango'),
     dependency('pangocairo'),
     dependency('xkbcommon'),
-    dependency('librsvg-2.0'),
-    dependency('libjpeg'),
-    c_compiler.find_library('m', required: false),
+    dependency('gdk-pixbuf-2.0'),
 ]
 
 
@@ -68,6 +66,9 @@ deps += [
     dependency('cairo-xcb'),
     dependency('libstartup-notification-1.0'),
 ]
+
+libgif = c_compiler.find_library('libgif', required: false)
+deps += [ libgif ]
 
 wayland_client = dependency('wayland-client', required: get_option('wayland'))
 wayland_protocols = dependency('wayland-protocols', required: get_option('wayland'))
@@ -98,6 +99,7 @@ header_conf.set('GLIB_VERSION_MIN_REQUIRED', '(G_ENCODE_VERSION(@0@,@1@))'.forma
 header_conf.set('GLIB_VERSION_MAX_ALLOWED', '(G_ENCODE_VERSION(@0@,@1@))'.format(glib_min_major, glib_min_minor))
 
 header_conf.set('ENABLE_DRUN', get_option('drun'))
+header_conf.set('HAVE_LIBGIF', libgif.found())
 header_conf.set('WINDOW_MODE', get_option('window'))
 
 header_conf.set('ENABLE_WAYLAND', wayland_client.found())
